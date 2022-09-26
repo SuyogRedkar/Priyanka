@@ -249,12 +249,15 @@ class _counsellingState extends State<counselling> {
                                     ),
                                   ],
                                 ),
-                                content: Text(
-                                    style: TextStyle(
-                                        fontSize: 12,
-                                        fontWeight: FontWeight.w400,
-                                        fontFamily: 'Outfit'),
-                                    'After looking at a student’s profile, his/her score of a standardised test and financial capability we are able to suggest a country of study and respective universities. Overseas education does not come cheap, which means you must make an informed choice based on your goals and interests. The Admission Counsellor will shortlist a number of appropriate universities for you after analysing your profile. You can then discuss the shortlisted universities with your family and friends before finalising.'),
+                                scrollable: true,
+                                content: SingleChildScrollView(
+                                  child: Text(
+                                      style: TextStyle(
+                                          fontSize: 12,
+                                          fontWeight: FontWeight.w400,
+                                          fontFamily: 'Outfit'),
+                                      'After looking at a student’s profile, his/her score of a standardised test and financial capability we are able to suggest a country of study and respective universities. Overseas education does not come cheap, which means you must make an informed choice based on your goals and interests. The Admission Counsellor will shortlist a number of appropriate universities for you after analysing your profile. You can then discuss the shortlisted universities with your family and friends before finalising.'),
+                                ),
                               ));
                     },
                     child: SvgPicture.asset(

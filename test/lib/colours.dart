@@ -8,4 +8,5 @@ class Colors {
   static const Color tertiary = Color.fromARGB(255, 255, 219, 207);
   static const Color warning = Color.fromARGB(255, 186, 26, 26);
   static const Color outline = Color.fromARGB(255, 133, 115, 109);
+  static const Color disable = Color.fromARGB(255, 235, 232, 231);
 }

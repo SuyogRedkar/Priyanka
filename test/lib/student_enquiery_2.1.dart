@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart' hide Colors;
 import 'package:test/student_enquiry_2.2.dart';
 import 'colours.dart';
+
 class StudentEnquiry extends StatefulWidget {
   const StudentEnquiry({super.key});
 
@@ -9,8 +10,42 @@ class StudentEnquiry extends StatefulWidget {
 }
 
 class _StudentEnquiryState extends State<StudentEnquiry> {
+  bool fname = false;
+  bool lname = false;
+  bool contact = false;
+  bool email = false;
+  var fnamecontroller = TextEditingController();
+  var lnamecontroller = TextEditingController();
+  var contactcontroller = TextEditingController();
+  var emailcontroller = TextEditingController();
+
   static const List<String> list = <String>['Margao', 'Panjim'];
   String? dropdownValue;
+  @override
+  void initState() {
+    super.initState();
+    fnamecontroller.addListener(() {
+      setState(() {
+        fname = fnamecontroller.text.isNotEmpty;
+      });
+    });
+    lnamecontroller.addListener(() {
+      setState(() {
+        lname = lnamecontroller.text.isNotEmpty;
+      });
+    });
+    contactcontroller.addListener(() {
+      setState(() {
+        contact = contactcontroller.text.isNotEmpty;
+      });
+    });
+    emailcontroller.addListener(() {
+      setState(() {
+        email = emailcontroller.text.isNotEmpty;
+      });
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -63,17 +98,25 @@ class _StudentEnquiryState extends State<StudentEnquiry> {
                 // ignore: prefer_const_constructors
                 Align(
                   alignment: Alignment.topLeft,
-                  child: const Padding(
+                  child: Padding(
                     padding: EdgeInsets.only(top: 32, bottom: 8),
-                    child: Text(
-                      "Your Name*",
-                      style: TextStyle(
-                          color: Colors.accent,
-                          fontFamily: 'Outfit',
-                          fontStyle: FontStyle.normal,
-                          fontSize: 14,
-                          fontWeight: FontWeight.w600,
-                          letterSpacing: 0.64),
+                    //used rich text to add 2 diff colors
+                    child: RichText(
+                      text: const TextSpan(
+                          text: "Your Name",
+                          style: TextStyle(
+                              color: Colors.accent,
+                              fontFamily: 'Outfit',
+                              fontStyle: FontStyle.normal,
+                              fontSize: 14,
+                              fontWeight: FontWeight.w600,
+                              letterSpacing: 0.64),
+                          children: <TextSpan>[
+                            TextSpan(
+                                text: '*',
+                                style: TextStyle(
+                                    color: Colors.warning, fontSize: 16)),
+                          ]),
                     ),
                   ),
                 ),
@@ -84,6 +127,7 @@ class _StudentEnquiryState extends State<StudentEnquiry> {
                       height: 40,
                       width: 154,
                       child: TextFormField(
+                        controller: fnamecontroller,
                         style: const TextStyle(
                           fontFamily: 'Outfit',
                           fontSize: 12,
@@ -113,6 +157,7 @@ class _StudentEnquiryState extends State<StudentEnquiry> {
                       height: 40,
                       width: 154,
                       child: TextFormField(
+                        controller: lnamecontroller,
                         style: const TextStyle(
                           fontFamily: 'Outfit',
                           fontSize: 12,
@@ -140,19 +185,26 @@ class _StudentEnquiryState extends State<StudentEnquiry> {
                     )
                   ],
                 ),
-                const Align(
+                Align(
                   alignment: Alignment.topLeft,
                   child: Padding(
                     padding: EdgeInsets.only(top: 17, bottom: 8),
-                    child: Text(
-                      "WhatsApp Number*",
-                      style: TextStyle(
-                          color: Colors.accent,
-                          fontFamily: 'Outfit',
-                          fontStyle: FontStyle.normal,
-                          fontSize: 14,
-                          fontWeight: FontWeight.w600,
-                          letterSpacing: 0.64),
+                    child: RichText(
+                      text: const TextSpan(
+                          text: "WhatsApp Number",
+                          style: TextStyle(
+                              color: Colors.accent,
+                              fontFamily: 'Outfit',
+                              fontStyle: FontStyle.normal,
+                              fontSize: 14,
+                              fontWeight: FontWeight.w600,
+                              letterSpacing: 0.64),
+                          children: <TextSpan>[
+                            TextSpan(
+                                text: '*',
+                                style: TextStyle(
+                                    color: Colors.warning, fontSize: 16)),
+                          ]),
                     ),
                   ),
                 ),
@@ -160,6 +212,7 @@ class _StudentEnquiryState extends State<StudentEnquiry> {
                   height: 40,
                   width: double.infinity,
                   child: TextFormField(
+                    controller: contactcontroller,
                     style: const TextStyle(
                       fontFamily: 'Outfit',
                       fontSize: 12,
@@ -182,19 +235,26 @@ class _StudentEnquiryState extends State<StudentEnquiry> {
                     },
                   ),
                 ),
-                const Align(
+                Align(
                   alignment: Alignment.topLeft,
                   child: Padding(
                     padding: EdgeInsets.only(top: 17, bottom: 8),
-                    child: Text(
-                      "Email ID*",
-                      style: TextStyle(
-                          color: Colors.accent,
-                          fontFamily: 'Outfit',
-                          fontStyle: FontStyle.normal,
-                          fontSize: 14,
-                          fontWeight: FontWeight.w600,
-                          letterSpacing: 0.64),
+                    child: RichText(
+                      text: const TextSpan(
+                          text: "Email ID",
+                          style: TextStyle(
+                              color: Colors.accent,
+                              fontFamily: 'Outfit',
+                              fontStyle: FontStyle.normal,
+                              fontSize: 14,
+                              fontWeight: FontWeight.w600,
+                              letterSpacing: 0.64),
+                          children: <TextSpan>[
+                            TextSpan(
+                                text: '*',
+                                style: TextStyle(
+                                    color: Colors.warning, fontSize: 16)),
+                          ]),
                     ),
                   ),
                 ),
@@ -202,6 +262,7 @@ class _StudentEnquiryState extends State<StudentEnquiry> {
                   height: 40,
                   width: double.infinity,
                   child: TextFormField(
+                    controller: emailcontroller,
                     style: const TextStyle(
                       fontFamily: 'Outfit',
                       fontSize: 12,
@@ -229,31 +290,45 @@ class _StudentEnquiryState extends State<StudentEnquiry> {
                   height: 32,
                 ),
                 Row(
-                  children: const [
-                    Text(
-                      "Choose your Center*",
-                      style: TextStyle(
-                          color: Colors.accent,
-                          fontFamily: 'Outfit',
-                          fontStyle: FontStyle.normal,
-                          fontSize: 14,
-                          fontWeight: FontWeight.w600,
-                          letterSpacing: 0.64),
+                  children: [
+                    RichText(
+                      text: const TextSpan(
+                          text: "Choose your Center",
+                          style: TextStyle(
+                              color: Colors.accent,
+                              fontFamily: 'Outfit',
+                              fontStyle: FontStyle.normal,
+                              fontSize: 14,
+                              fontWeight: FontWeight.w600,
+                              letterSpacing: 0.64),
+                          children: <TextSpan>[
+                            TextSpan(
+                                text: '*',
+                                style: TextStyle(
+                                    color: Colors.warning, fontSize: 18)),
+                          ]),
                     ),
                     SizedBox(
                       width: 75,
                     ),
                     Align(
                       alignment: Alignment.topLeft,
-                      child: Text(
-                        "Date of Birth*",
-                        style: TextStyle(
-                            color: Colors.accent,
-                            fontFamily: 'Outfit',
-                            fontStyle: FontStyle.normal,
-                            fontSize: 14,
-                            fontWeight: FontWeight.w600,
-                            letterSpacing: 0.64),
+                      child: RichText(
+                        text: const TextSpan(
+                            text: "Date of Birth",
+                            style: TextStyle(
+                                color: Colors.accent,
+                                fontFamily: 'Outfit',
+                                fontStyle: FontStyle.normal,
+                                fontSize: 14,
+                                fontWeight: FontWeight.w600,
+                                letterSpacing: 0.64),
+                            children: <TextSpan>[
+                              TextSpan(
+                                  text: '*',
+                                  style: TextStyle(
+                                      color: Colors.warning, fontSize: 18)),
+                            ]),
                       ),
                     ),
                   ],
@@ -330,9 +405,28 @@ class _StudentEnquiryState extends State<StudentEnquiry> {
                 // ignore: prefer_const_constructors
                 Padding(
                   padding: const EdgeInsets.only(top: 32),
-                  child: const Align(
-                      alignment: Alignment.bottomLeft,
-                      child: Text('*Mandatory Fields')),
+                  child: Align(
+                    alignment: Alignment.bottomLeft,
+                    child: RichText(
+                      text: const TextSpan(
+                          text: "*",
+                          style: TextStyle(
+                            color: Colors.warning,
+                            fontSize: 14,
+                          ),
+                          children: <TextSpan>[
+                            TextSpan(
+                                text: 'Mandatory Feilds',
+                                style: TextStyle(
+                                    color: Colors.accent,
+                                    fontSize: 14,
+                                    fontFamily: 'Outfit',
+                                    fontStyle: FontStyle.normal,
+                                    fontWeight: FontWeight.w600,
+                                    letterSpacing: 0.64)),
+                          ]),
+                    ),
+                  ),
                 ),
                 // ignore: prefer_const_constructors
                 SizedBox(
@@ -342,28 +436,35 @@ class _StudentEnquiryState extends State<StudentEnquiry> {
                   height: 45,
                   width: double.infinity,
                   child: ElevatedButton(
-                    onPressed: () {
-                      Navigator.of(context).push(
-                          MaterialPageRoute(
-                              builder: (context) => const StudentEnquiry2()),
-                        );
-                    },
-                    style: ButtonStyle(
-                      foregroundColor:
-                          MaterialStateProperty.all<Color>(Colors.accent),
-                      backgroundColor:
-                          MaterialStateProperty.all<Color>(Colors.secondary),
-                      shape: MaterialStateProperty.all<RoundedRectangleBorder>(
-                        RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(8.0),
-                        ),
-                      ),
+                    onPressed: fname
+                        ? lname
+                            ? contact
+                                ? email
+                                    ? () {
+                                        Navigator.of(context).push(
+                                          MaterialPageRoute(
+                                              builder: (context) =>
+                                                  const StudentEnquiry2()),
+                                        );
+                                      }
+                                    : null
+                                : null
+                            : null
+                        : null,
+                    style: ElevatedButton.styleFrom(
+                      disabledBackgroundColor: Colors.disable,
+                      disabledForegroundColor: Colors.outline,
+                      foregroundColor: Colors.accent,
+                      backgroundColor: Colors.secondary,
+                      shape: RoundedRectangleBorder(
+                          // side: BorderSide(color: Colors.secondary, width: 1),
+                          borderRadius: BorderRadius.circular(8.0)),
                     ),
                     child: const Padding(
                       padding: EdgeInsets.all(14),
                       child: Text(
                         'SUBMIT',
-                        style: TextStyle(fontSize: 16),
+                        style: TextStyle(fontSize: 16, color: Colors.accent),
                       ),
                     ),
                   ),
