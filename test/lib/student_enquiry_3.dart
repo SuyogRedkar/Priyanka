@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart' hide Colors;
+import 'package:flutter_svg/svg.dart';
 import 'package:test/student_enquiry_4.dart';
 import 'colours.dart';
+import 'package:dropdown_button2/dropdown_button2.dart';
 
 class StudentEnquiry3 extends StatefulWidget {
   const StudentEnquiry3({super.key});
@@ -10,10 +12,62 @@ class StudentEnquiry3 extends StatefulWidget {
 }
 
 class _StudentEnquiry3State extends State<StudentEnquiry3> {
-  static const List<String> list = <String>['Married', 'Unmarried'];
-  String dropdownValue = list.first;
+  final List<String> items = [
+    'Married',
+    'Unmarried',
+  ];
+  String? selectedValue;
 
-  static const List<String> budget = <String>[
+  List<DropdownMenuItem<String>> _addDividersAfterItems(List<String> items) {
+    List<DropdownMenuItem<String>> _menuItems = [];
+    for (var item in items) {
+      _menuItems.addAll(
+        [
+          DropdownMenuItem<String>(
+            value: item,
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 8.0),
+              child: Text(
+                item,
+                style: const TextStyle(
+                  fontSize: 14,
+                ),
+              ),
+            ),
+          ),
+          //If it's last item, we will not add Divider after it.
+          if (item != items.last)
+            const DropdownMenuItem<String>(
+              enabled: false,
+              child: Divider(
+                thickness: 1,
+                color: Colors.secondary,
+              ),
+            ),
+        ],
+      );
+    }
+    return _menuItems;
+  }
+
+  List<double> _getCustomItemsHeights() {
+    List<double> _itemsHeights = [];
+    for (var i = 0; i < (items.length * 2) - 1; i++) {
+      if (i.isEven) {
+        _itemsHeights.add(40);
+      }
+      //Dividers indexes will be the odd indexes
+      if (i.isOdd) {
+        _itemsHeights.add(4);
+      }
+    }
+    return _itemsHeights;
+  }
+
+  bool budgetpreference = false;
+  var budgetpreferencecontroller = TextEditingController();
+
+  final List<String> budgets = [
     'INR 15,00,000 - 25,00,000',
     'INR 25,00,000 - 35,00,000',
     'INR 35,00,000 - 45,00,000',
@@ -22,7 +76,54 @@ class _StudentEnquiry3State extends State<StudentEnquiry3> {
     'INR 75,00,000 - 1,00,00,000',
     'INR 1,00,00,000+'
   ];
-  String? dropdownvalue1;
+  String? selectedvalue1;
+
+  List<DropdownMenuItem<String>> _addDividersAfterbudget(List<String> items) {
+    List<DropdownMenuItem<String>> _menuitems = [];
+    for (var budget in budgets) {
+      _menuitems.addAll(
+        [
+          DropdownMenuItem<String>(
+            value: budget,
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 8.0),
+              child: Text(
+                budget,
+                style: const TextStyle(
+                  fontSize: 14,
+                ),
+              ),
+            ),
+          ),
+          //If it's last item, we will not add Divider after it.
+          if (budget != budgets.last)
+            const DropdownMenuItem<String>(
+              enabled: false,
+              child: Divider(
+                thickness: 1,
+                color: Colors.secondary,
+              ),
+            ),
+        ],
+      );
+    }
+    return _menuitems;
+  }
+
+  List<double> _getCustombudgetHeights() {
+    List<double> _budgetHeights = [];
+    for (var i = 0; i < (budgets.length * 2) - 1; i++) {
+      if (i.isEven) {
+        _budgetHeights.add(40);
+      }
+      //Dividers indexes will be the odd indexes
+      if (i.isOdd) {
+        _budgetHeights.add(4);
+      }
+    }
+    return _budgetHeights;
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -68,6 +169,10 @@ class _StudentEnquiry3State extends State<StudentEnquiry3> {
                         letterSpacing: 0.64),
                   ),
                 ),
+              ),
+              Padding(
+                padding: const EdgeInsets.only(top: 37),
+                child: SvgPicture.asset('assets/images/Progress(2).svg'),
               ),
               const Padding(
                 padding: EdgeInsets.only(top: 32, bottom: 8),
@@ -130,35 +235,46 @@ class _StudentEnquiry3State extends State<StudentEnquiry3> {
                   child: SizedBox(
                     height: 40,
                     width: 154,
-                    child: DropdownButtonFormField(
-                        decoration: InputDecoration(
-                          hintText: 'Center',
-                          enabledBorder: OutlineInputBorder(
-                              borderSide:
-                                  const BorderSide(color: Colors.secondary),
-                              borderRadius: BorderRadius.circular(4)),
-                          focusedBorder: OutlineInputBorder(
-                              borderSide:
-                                  const BorderSide(color: Colors.secondary),
-                              borderRadius: BorderRadius.circular(4)),
+                    child: DecoratedBox(
+                      decoration: BoxDecoration(
+                        color:
+                            Colors.base, //background color of dropdown button
+                        border: Border.all(
+                            color: Colors.secondary,
+                            width: 1), //border of dropdown button
+                        borderRadius: BorderRadius.circular(
+                            4), //border raiuds of dropdown button
+                      ),
+                      child: DropdownButtonHideUnderline(
+                        child: DropdownButton2(
+                          isExpanded: true,
+                          hint: Padding(
+                            padding: const EdgeInsets.only(
+                                left: 9, top: 11.5, bottom: 11.5),
+                            child: Text(
+                              'Maritial Status',
+                              style: TextStyle(
+                                fontSize: 14,
+                                color: Theme.of(context).hintColor,
+                              ),
+                            ),
+                          ),
+                          items: _addDividersAfterItems(items),
+                          customItemsHeights: _getCustomItemsHeights(),
+                          value: selectedValue,
+                          onChanged: (value) {
+                            setState(() {
+                              selectedValue = value as String;
+                            });
+                          },
+                          buttonHeight: 40,
+                          dropdownMaxHeight: 200,
+                          buttonWidth: 140,
+                          itemPadding:
+                              const EdgeInsets.symmetric(horizontal: 8.0),
                         ),
-                        value: dropdownValue,
-                        icon: const Icon(Icons.arrow_drop_down),
-                        onChanged: (String? value) {
-                          // This is called when the user selects an item.
-                          setState(() {
-                            dropdownValue = value!;
-                          });
-                        },
-                        items:
-                            list.map<DropdownMenuItem<String>>((String value) {
-                          return DropdownMenuItem(
-                              value: value,
-                              child: Text(
-                                value,
-                                style: const TextStyle(color: Colors.accent),
-                              ));
-                        }).toList()),
+                      ),
+                    ),
                   ),
                 ),
               ),
@@ -236,41 +352,55 @@ class _StudentEnquiry3State extends State<StudentEnquiry3> {
                   ),
                 ),
               ),
-              SizedBox(
-                height: 40,
-                width: double.infinity,
-                child: DropdownButtonFormField(
-                  decoration: InputDecoration(
-                    hintText: 'Select a Budget',
-                    hintStyle: const TextStyle(
-                      fontSize: 10,
-                      fontFamily: 'Outfit',
-                      fontWeight: FontWeight.w400,
-                      letterSpacing: 0.2,
+              Align(
+                alignment: Alignment.bottomLeft,
+                child: Padding(
+                  padding: const EdgeInsets.only(top: 8.0),
+                  child: SizedBox(
+                    height: 40,
+                    width: double.infinity,
+                    child: DecoratedBox(
+                      decoration: BoxDecoration(
+                        color:
+                            Colors.base, //background color of dropdown button
+                        border: Border.all(
+                            color: Colors.secondary,
+                            width: 1), //border of dropdown button
+                        borderRadius: BorderRadius.circular(
+                            4), //border raiuds of dropdown button
+                      ),
+                      child: DropdownButtonHideUnderline(
+                        child: DropdownButton2(
+                          isExpanded: true,
+                          hint: Padding(
+                            padding: const EdgeInsets.only(
+                                left: 9, top: 11.5, bottom: 11.5),
+                            child: Text(
+                              'Select a budget',
+                              style: TextStyle(
+                                fontSize: 14,
+                                color: Theme.of(context).hintColor,
+                              ),
+                            ),
+                          ),
+                          items: _addDividersAfterbudget(items),
+                          customItemsHeights: _getCustombudgetHeights(),
+                          //value is const its a static value it cnt be assignmed to something else
+                          value: selectedvalue1,
+                          onChanged: (value) {
+                            setState(() {
+                              selectedvalue1 = value as String;
+                            });
+                          },
+                          buttonHeight: 40,
+                          dropdownMaxHeight: 200,
+                          buttonWidth: 140,
+                          itemPadding:
+                              const EdgeInsets.symmetric(horizontal: 8.0),
+                        ),
+                      ),
                     ),
-                    enabledBorder: OutlineInputBorder(
-                        borderSide: const BorderSide(color: Colors.secondary),
-                        borderRadius: BorderRadius.circular(4)),
-                    focusedBorder: OutlineInputBorder(
-                        borderSide: const BorderSide(color: Colors.secondary),
-                        borderRadius: BorderRadius.circular(4)),
                   ),
-                  items: budget.map<DropdownMenuItem<String>>((String value) {
-                    return DropdownMenuItem(
-                        value: value,
-                        child: Text(
-                          value,
-                          style: const TextStyle(color: Colors.accent),
-                        ));
-                  }).toList(),
-                  value: dropdownvalue1,
-                  icon: const Icon(Icons.arrow_drop_down),
-                  onChanged: (value1) {
-                    // This is called when the user selects an item.
-                    setState(() {
-                      dropdownvalue1 = value1 as String?;
-                    });
-                  },
                 ),
               ),
               // ignore: prefer_const_constructors

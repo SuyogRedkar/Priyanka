@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart' hide Colors;
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:test/student_enquiry_2.2.dart';
 import 'colours.dart';
+import 'package:dropdown_button2/dropdown_button2.dart';
 
 class StudentEnquiry extends StatefulWidget {
   const StudentEnquiry({super.key});
@@ -10,6 +12,55 @@ class StudentEnquiry extends StatefulWidget {
 }
 
 class _StudentEnquiryState extends State<StudentEnquiry> {
+  final List<String> items = [
+    'Margao',
+    'Panjim',
+  ];
+  String? selectedValue;
+
+  List<DropdownMenuItem<String>> _addDividersAfterItems(List<String> items) {
+    List<DropdownMenuItem<String>> _menuItems = [];
+    for (var item in items) {
+      _menuItems.addAll(
+        [
+          DropdownMenuItem<String>(
+            value: item,
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 8.0),
+              child: Text(
+                item,
+                style: const TextStyle(
+                  fontSize: 14,
+                ),
+              ),
+            ),
+          ),
+          //If it's last item, we will not add Divider after it.
+          if (item != items.last)
+            const DropdownMenuItem<String>(
+              enabled: false,
+              child: Divider(),
+            ),
+        ],
+      );
+    }
+    return _menuItems;
+  }
+
+  List<double> _getCustomItemsHeights() {
+    List<double> _itemsHeights = [];
+    for (var i = 0; i < (items.length * 2) - 1; i++) {
+      if (i.isEven) {
+        _itemsHeights.add(40);
+      }
+      //Dividers indexes will be the odd indexes
+      if (i.isOdd) {
+        _itemsHeights.add(4);
+      }
+    }
+    return _itemsHeights;
+  }
+
   bool fname = false;
   bool lname = false;
   bool contact = false;
@@ -19,8 +70,6 @@ class _StudentEnquiryState extends State<StudentEnquiry> {
   var contactcontroller = TextEditingController();
   var emailcontroller = TextEditingController();
 
-  static const List<String> list = <String>['Margao', 'Panjim'];
-  String? dropdownValue;
   @override
   void initState() {
     super.initState();
@@ -94,6 +143,10 @@ class _StudentEnquiryState extends State<StudentEnquiry> {
                           letterSpacing: 0.64),
                     ),
                   ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.only(top: 37),
+                  child: SvgPicture.asset('assets/images/Progress.svg'),
                 ),
                 // ignore: prefer_const_constructors
                 Align(
@@ -343,36 +396,46 @@ class _StudentEnquiryState extends State<StudentEnquiry> {
                       child: SizedBox(
                         height: 40,
                         width: 154,
-                        child: DropdownButtonFormField(
-                            decoration: InputDecoration(
-                              hintText: 'Center',
-                              enabledBorder: OutlineInputBorder(
-                                  borderSide:
-                                      const BorderSide(color: Colors.secondary),
-                                  borderRadius: BorderRadius.circular(4)),
-                              focusedBorder: OutlineInputBorder(
-                                  borderSide:
-                                      const BorderSide(color: Colors.secondary),
-                                  borderRadius: BorderRadius.circular(4)),
+                        child: DecoratedBox(
+                          decoration: BoxDecoration(
+                            color: Colors
+                                .base, //background color of dropdown button
+                            border: Border.all(
+                                color: Colors.secondary,
+                                width: 1), //border of dropdown button
+                            borderRadius: BorderRadius.circular(
+                                4), //border raiuds of dropdown button
+                          ),
+                          child: DropdownButtonHideUnderline(
+                            child: DropdownButton2(
+                              isExpanded: true,
+                              hint: Padding(
+                                padding: const EdgeInsets.only(
+                                    left: 9, top: 11.5, bottom: 11.5),
+                                child: Text(
+                                  'Center',
+                                  style: TextStyle(
+                                    fontSize: 14,
+                                    color: Theme.of(context).hintColor,
+                                  ),
+                                ),
+                              ),
+                              items: _addDividersAfterItems(items),
+                              customItemsHeights: _getCustomItemsHeights(),
+                              value: selectedValue,
+                              onChanged: (value) {
+                                setState(() {
+                                  selectedValue = value as String;
+                                });
+                              },
+                              buttonHeight: 40,
+                              dropdownMaxHeight: 200,
+                              buttonWidth: 140,
+                              itemPadding:
+                                  const EdgeInsets.symmetric(horizontal: 8.0),
                             ),
-                            value: dropdownValue,
-                            icon: const Icon(Icons.arrow_drop_down),
-                            onChanged: (String? value) {
-                              // This is called when the user selects an item.
-                              setState(() {
-                                dropdownValue = value!;
-                              });
-                            },
-                            items: list
-                                .map<DropdownMenuItem<String>>((String value) {
-                              return DropdownMenuItem(
-                                  value: value,
-                                  child: Text(
-                                    value,
-                                    style:
-                                        const TextStyle(color: Colors.accent),
-                                  ));
-                            }).toList()),
+                          ),
+                        ),
                       ),
                     ),
                     Padding(

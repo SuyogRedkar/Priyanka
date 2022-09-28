@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart' hide Colors;
+import 'package:flutter_svg/svg.dart';
 //import 'package:test/student_enquiry_2.2.dart';
 import 'package:test/student_enquiry_3.dart';
 import 'colours.dart';
@@ -12,8 +13,6 @@ class StudentEnquiry2 extends StatefulWidget {
   State<StudentEnquiry2> createState() => _StudentEnquiry2State();
 }
 
-//bool country = false;
-
 class Country {
   final int id;
   final String name;
@@ -25,6 +24,23 @@ class Country {
 }
 
 class _StudentEnquiry2State extends State<StudentEnquiry2> {
+  List _selectedCountry = [];
+  static List<Country> _country = [
+    Country(id: 1, name: 'Australia'),
+    Country(id: 2, name: 'Canada'),
+    Country(id: 3, name: 'Germany'),
+    Country(id: 4, name: 'Ireland'),
+    Country(id: 5, name: 'New Zealand'),
+    Country(id: 6, name: 'United Kingdom'),
+    Country(id: 7, name: 'USA'),
+    Country(id: 8, name: 'Multi Country '),
+    Country(id: 8, name: 'Europe'),
+    Country(id: 8, name: 'Undecided'),
+  ];
+  final _items = _country
+      .map((country) => MultiSelectItem<Country>(country, country.name))
+      .toList();
+  //final _multiselectkey = GlobalKey<FormFieldState>();
   bool course = false;
   bool percentage10 = false;
   bool yearofpassing10 = false;
@@ -54,30 +70,10 @@ class _StudentEnquiry2State extends State<StudentEnquiry2> {
   var gmatScorecontroller = TextEditingController();
   var greScorecontroller = TextEditingController();
   var ieltsScorecontroller = TextEditingController();
-  static final List<Country> _country = [
-    Country(id: 1, name: "Australia"),
-    Country(id: 2, name: "Canada"),
-    Country(id: 3, name: "Germany"),
-    Country(id: 4, name: "New Zealand"),
-    Country(id: 5, name: "United Kingdom"),
-    Country(id: 6, name: "USA"),
-    Country(id: 7, name: "Multi Country "),
-    Country(id: 8, name: "Europe"),
-    Country(id: 9, name: "Undecided"),
-  ];
-  final _items = _country
-      .map((Country) => MultiSelectItem(Country, Country.name))
-      .toList();
-  //List<Country> _selectedAnimals = [];
-  List<Country> _selectedAnimals2 = [];
-  List<Country> _selectedAnimals3 = [];
-  //List<Country> _selectedAnimals4 = [];
-  List<Country> _selectedAnimals5 = [];
-  final _multiSelectKey = GlobalKey<FormFieldState>();
 
   @override
   void initState() {
-    _selectedAnimals5 = _country;
+    _selectedCountry = _country;
     super.initState();
     coursecontroller.addListener(() {
       setState(() {
@@ -210,6 +206,10 @@ class _StudentEnquiry2State extends State<StudentEnquiry2> {
                   ),
                 ),
               ),
+              Padding(
+                padding: const EdgeInsets.only(top: 37),
+                child: SvgPicture.asset('assets/images/Progress(1).svg'),
+              ),
               Align(
                 alignment: Alignment.bottomLeft,
                 child: Padding(
@@ -237,30 +237,17 @@ class _StudentEnquiry2State extends State<StudentEnquiry2> {
                   ),
                 ),
               ),
-              MultiSelectDialogField(
+              MultiSelectChipField(
                 items: _items,
-                title: const Text("Animals"),
-                selectedColor: Colors.accent,
+                title: Text("Country"),
+                headerColor: Colors.secondary.withOpacity(0.5),
                 decoration: BoxDecoration(
-                  borderRadius: const BorderRadius.all(Radius.circular(4)),
-                  border: Border.all(
-                    color: Colors.secondary,
-                    width: 2,
-                  ),
+                  border: Border.all(color: Colors.secondary, width: 1.8),
                 ),
-                buttonIcon: const Icon(
-                  Icons.arrow_drop_down,
-                  color: Colors.secondary,
-                ),
-                buttonText: const Text(
-                  "Country",
-                  style: TextStyle(
-                    color: Colors.accent,
-                    fontSize: 16,
-                  ),
-                ),
-                onConfirm: (results) {
-                  //_selectedAnimals = results;
+                selectedChipColor: Colors.secondary.withOpacity(0.5),
+                selectedTextStyle: TextStyle(color: Colors.secondary),
+                onTap: (values) {
+                  _selectedCountry = values;
                 },
               ),
               Align(
@@ -1036,7 +1023,7 @@ class _StudentEnquiry2State extends State<StudentEnquiry2> {
                 height: 32,
               ),
               Padding(
-                padding: const EdgeInsets.only(top: 32),
+                padding: const EdgeInsets.only(top: 32, bottom: 108),
                 child: SizedBox(
                   height: 44,
                   width: double.infinity,
