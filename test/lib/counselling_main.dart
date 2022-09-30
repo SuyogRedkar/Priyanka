@@ -37,7 +37,7 @@ class _counsellingState extends State<counselling> {
         backgroundColor: Colors.primary,
         toolbarHeight: 120,
       ),
-      backgroundColor: Colors.base,
+      backgroundColor: Colors.background,
       body: SingleChildScrollView(
           child: Padding(
         padding: const EdgeInsets.symmetric(vertical: 32, horizontal: 16),

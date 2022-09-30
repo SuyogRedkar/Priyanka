@@ -4,7 +4,7 @@ import 'package:flutter_svg/svg.dart';
 import 'package:test/student_enquiry_3.dart';
 import 'colours.dart';
 //import 'package:login/student_enquiry_3.dart';
-import 'package:multi_select_flutter/multi_select_flutter.dart';
+import 'package:dropdown_search/dropdown_search.dart';
 
 class StudentEnquiry2 extends StatefulWidget {
   const StudentEnquiry2({super.key});
@@ -13,33 +13,9 @@ class StudentEnquiry2 extends StatefulWidget {
   State<StudentEnquiry2> createState() => _StudentEnquiry2State();
 }
 
-class Country {
-  final int id;
-  final String name;
-
-  Country({
-    required this.id,
-    required this.name,
-  });
-}
-
 class _StudentEnquiry2State extends State<StudentEnquiry2> {
-  List _selectedCountry = [];
-  static List<Country> _country = [
-    Country(id: 1, name: 'Australia'),
-    Country(id: 2, name: 'Canada'),
-    Country(id: 3, name: 'Germany'),
-    Country(id: 4, name: 'Ireland'),
-    Country(id: 5, name: 'New Zealand'),
-    Country(id: 6, name: 'United Kingdom'),
-    Country(id: 7, name: 'USA'),
-    Country(id: 8, name: 'Multi Country '),
-    Country(id: 8, name: 'Europe'),
-    Country(id: 8, name: 'Undecided'),
-  ];
-  final _items = _country
-      .map((country) => MultiSelectItem<Country>(country, country.name))
-      .toList();
+  final _popupCustomValidationKey = GlobalKey<DropdownSearchState<int>>();
+
   //final _multiselectkey = GlobalKey<FormFieldState>();
   bool course = false;
   bool percentage10 = false;
@@ -73,7 +49,6 @@ class _StudentEnquiry2State extends State<StudentEnquiry2> {
 
   @override
   void initState() {
-    _selectedCountry = _country;
     super.initState();
     coursecontroller.addListener(() {
       setState(() {
@@ -182,7 +157,7 @@ class _StudentEnquiry2State extends State<StudentEnquiry2> {
         backgroundColor: Colors.primary,
         toolbarHeight: 120,
       ),
-      backgroundColor: Colors.base,
+      backgroundColor: Colors.background,
       // ignore: prefer_const_constructors
       body: SingleChildScrollView(
         child: Padding(
@@ -237,18 +212,25 @@ class _StudentEnquiry2State extends State<StudentEnquiry2> {
                   ),
                 ),
               ),
-              MultiSelectChipField(
-                items: _items,
-                title: Text("Country"),
-                headerColor: Colors.secondary.withOpacity(0.5),
-                decoration: BoxDecoration(
-                  border: Border.all(color: Colors.secondary, width: 1.8),
-                ),
-                selectedChipColor: Colors.secondary.withOpacity(0.5),
-                selectedTextStyle: TextStyle(color: Colors.secondary),
-                onTap: (values) {
-                  _selectedCountry = values;
-                },
+              DropdownSearch<String>.multiSelection(
+                mode: Mode.MENU,
+                showSelectedItems: true,
+                items: const [
+                  'Australia',
+                  'Canada',
+                  'Germany',
+                  'Ireland',
+                  'New Zealand',
+                  'United Kingdom',
+                  'USA',
+                  'Multi Country',
+                  'Europe',
+                  'Undecided',
+                ],
+                dropdownSearchDecoration:
+                    InputDecoration(hintText: 'Country Preference'),
+                showSearchBox: true,
+                searchFieldProps: TextFieldProps(cursorColor: Colors.secondary),
               ),
               Align(
                 alignment: Alignment.bottomLeft,

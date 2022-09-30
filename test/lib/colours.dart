@@ -9,4 +9,5 @@ class Colors {
   static const Color warning = Color.fromARGB(255, 186, 26, 26);
   static const Color outline = Color.fromARGB(255, 133, 115, 109);
   static const Color disable = Color.fromARGB(255, 235, 232, 231);
+  static const Color background = Color.fromARGB(255, 255, 249, 247);
 }

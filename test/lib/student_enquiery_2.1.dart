@@ -2,7 +2,8 @@ import 'package:flutter/material.dart' hide Colors;
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:test/student_enquiry_2.2.dart';
 import 'colours.dart';
-import 'package:dropdown_button2/dropdown_button2.dart';
+
+import 'package:dropdown_search/dropdown_search.dart';
 
 class StudentEnquiry extends StatefulWidget {
   const StudentEnquiry({super.key});
@@ -17,58 +18,18 @@ class _StudentEnquiryState extends State<StudentEnquiry> {
     'Panjim',
   ];
   String? selectedValue;
-
-  List<DropdownMenuItem<String>> _addDividersAfterItems(List<String> items) {
-    List<DropdownMenuItem<String>> _menuItems = [];
-    for (var item in items) {
-      _menuItems.addAll(
-        [
-          DropdownMenuItem<String>(
-            value: item,
-            child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 8.0),
-              child: Text(
-                item,
-                style: const TextStyle(
-                  fontSize: 14,
-                ),
-              ),
-            ),
-          ),
-          //If it's last item, we will not add Divider after it.
-          if (item != items.last)
-            const DropdownMenuItem<String>(
-              enabled: false,
-              child: Divider(),
-            ),
-        ],
-      );
-    }
-    return _menuItems;
-  }
-
-  List<double> _getCustomItemsHeights() {
-    List<double> _itemsHeights = [];
-    for (var i = 0; i < (items.length * 2) - 1; i++) {
-      if (i.isEven) {
-        _itemsHeights.add(40);
-      }
-      //Dividers indexes will be the odd indexes
-      if (i.isOdd) {
-        _itemsHeights.add(4);
-      }
-    }
-    return _itemsHeights;
-  }
+  final _popupCustomValidationKey = GlobalKey<DropdownSearchState<int>>();
 
   bool fname = false;
   bool lname = false;
   bool contact = false;
   bool email = false;
+  bool dob = false;
   var fnamecontroller = TextEditingController();
   var lnamecontroller = TextEditingController();
   var contactcontroller = TextEditingController();
   var emailcontroller = TextEditingController();
+  var dobcontroller = TextEditingController();
 
   @override
   void initState() {
@@ -91,6 +52,11 @@ class _StudentEnquiryState extends State<StudentEnquiry> {
     emailcontroller.addListener(() {
       setState(() {
         email = emailcontroller.text.isNotEmpty;
+      });
+    });
+    dobcontroller.addListener(() {
+      setState(() {
+        dob = dobcontroller.text.isNotEmpty;
       });
     });
   }
@@ -119,7 +85,7 @@ class _StudentEnquiryState extends State<StudentEnquiry> {
         backgroundColor: Colors.primary,
         toolbarHeight: 120,
       ),
-      backgroundColor: Colors.base,
+      backgroundColor: Colors.background,
       body: SingleChildScrollView(
         child: Padding(
           padding: const EdgeInsets.symmetric(vertical: 32, horizontal: 20),
@@ -390,60 +356,12 @@ class _StudentEnquiryState extends State<StudentEnquiry> {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Padding(
-                      padding: const EdgeInsets.only(
-                        top: 8.0,
-                      ),
-                      child: SizedBox(
-                        height: 40,
-                        width: 154,
-                        child: DecoratedBox(
-                          decoration: BoxDecoration(
-                            color: Colors
-                                .base, //background color of dropdown button
-                            border: Border.all(
-                                color: Colors.secondary,
-                                width: 1), //border of dropdown button
-                            borderRadius: BorderRadius.circular(
-                                4), //border raiuds of dropdown button
-                          ),
-                          child: DropdownButtonHideUnderline(
-                            child: DropdownButton2(
-                              isExpanded: true,
-                              hint: Padding(
-                                padding: const EdgeInsets.only(
-                                    left: 9, top: 11.5, bottom: 11.5),
-                                child: Text(
-                                  'Center',
-                                  style: TextStyle(
-                                    fontSize: 14,
-                                    color: Theme.of(context).hintColor,
-                                  ),
-                                ),
-                              ),
-                              items: _addDividersAfterItems(items),
-                              customItemsHeights: _getCustomItemsHeights(),
-                              value: selectedValue,
-                              onChanged: (value) {
-                                setState(() {
-                                  selectedValue = value as String;
-                                });
-                              },
-                              buttonHeight: 40,
-                              dropdownMaxHeight: 200,
-                              buttonWidth: 140,
-                              itemPadding:
-                                  const EdgeInsets.symmetric(horizontal: 8.0),
-                            ),
-                          ),
-                        ),
-                      ),
-                    ),
-                    Padding(
                       padding: const EdgeInsets.only(left: 20, top: 8.0),
                       child: SizedBox(
                         height: 40,
                         width: 154,
                         child: TextFormField(
+                          controller: dobcontroller,
                           style: const TextStyle(
                             fontFamily: 'Outfit',
                             fontSize: 12,
@@ -479,7 +397,7 @@ class _StudentEnquiryState extends State<StudentEnquiry> {
                           ),
                           children: <TextSpan>[
                             TextSpan(
-                                text: 'Mandatory Feilds',
+                                text: 'Mandatory Fields',
                                 style: TextStyle(
                                     color: Colors.accent,
                                     fontSize: 14,
@@ -503,13 +421,15 @@ class _StudentEnquiryState extends State<StudentEnquiry> {
                         ? lname
                             ? contact
                                 ? email
-                                    ? () {
-                                        Navigator.of(context).push(
-                                          MaterialPageRoute(
-                                              builder: (context) =>
-                                                  const StudentEnquiry2()),
-                                        );
-                                      }
+                                    ? dob
+                                        ? () {
+                                            Navigator.of(context).push(
+                                              MaterialPageRoute(
+                                                  builder: (context) =>
+                                                      const StudentEnquiry2()),
+                                            );
+                                          }
+                                        : null
                                     : null
                                 : null
                             : null

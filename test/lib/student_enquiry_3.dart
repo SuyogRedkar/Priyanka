@@ -148,6 +148,7 @@ class _StudentEnquiry3State extends State<StudentEnquiry3> {
         backgroundColor: Colors.primary,
         toolbarHeight: 120,
       ),
+      backgroundColor: Colors.background,
       body: SingleChildScrollView(
         child: Padding(
           padding: const EdgeInsets.symmetric(vertical: 32, horizontal: 16),
